@@ -74,13 +74,14 @@ def get_random_empty_location():
         if field[i][j] == EMPTY:
             return i, j
 
+"""
 def get_attack_unit(field, position(i,j), player):
     for i in range(FIELD_SIZE):
         for j in range(FIELD_SIZE):
             if (field[i][j] == HUMAN_UNIT or field[i][j] == COMPUTER_UNIT) and abs(i - position[0]) <= 1 and abs(j - position[1]) <= 1 and (i, j) != position and field[i][j] != player:
                 return (i, j)
     return None
-
+"""
 
 # Main game loop
 while True:
@@ -91,6 +92,10 @@ while True:
     # Print game field and resources
     print_field()
     print_resources()
+    
+    #get_attack_unit(field(i,j), position(i,j), player(HUMAN_PLAYER,COMPUTER_ENEMY))
+    #print(get_attack_unit())
+
 
     # Human player's turn (same code as before)
 
@@ -144,8 +149,7 @@ while True:
     
     # Collect resources for computer player
     computer_resources += count_structures(COMPUTER_ENEMY) * RESOURCES_PER_STRUCTURE        
-    get_attack_unit(field(i,j), position(i,j), player(HUMAN_PLAYER,COMPUTER_ENEMY))
-    print(get_attack_unit())
+    
     # Computer's turn
     if computer_resources >= 10:
         i, j = get_random_empty_location()
