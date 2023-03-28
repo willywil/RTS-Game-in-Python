@@ -1,12 +1,12 @@
 import random
 
 # Define constants
-FIELD_SIZE = 20
+FIELD_SIZE = 40
 HUMAN_PLAYER = 1
 COMPUTER_ENEMY = 2
 RESOURCE_LABEL = "Resources: "
-HUMAN_RESOURCES = 100
-COMPUTER_RESOURCES = 100
+HUMAN_RESOURCES = 1000
+COMPUTER_RESOURCES = 1000
 
 # Define game objects
 EMPTY = 0
@@ -16,6 +16,7 @@ HUMAN_UNIT = 3
 COMPUTER_BASE = 4
 COMPUTER_STRUCTURE = 5
 COMPUTER_UNIT = 6
+RESOURCES_PER_STRUCTURE = 5
 
 # Initialize game field
 field = [[EMPTY for i in range(FIELD_SIZE)] for j in range(FIELD_SIZE)]
@@ -25,6 +26,16 @@ field[FIELD_SIZE-1][FIELD_SIZE-1] = COMPUTER_BASE
 # Initialize resources
 human_resources = HUMAN_RESOURCES
 computer_resources = COMPUTER_RESOURCES
+
+
+# Define helper functions
+def count_structures(player):
+    count = 0
+    for i in range(FIELD_SIZE):
+        for j in range(FIELD_SIZE):
+            if field[i][j] == player + 1:
+                count += 1
+    return count
 
 # Define helper functions
 def print_field():
@@ -59,10 +70,24 @@ def get_random_empty_location():
 
 # Main game loop
 while True:
+
+    # Collect resources for human player
+    human_resources += count_structures(HUMAN_PLAYER) * RESOURCES_PER_STRUCTURE
+
     # Print game field and resources
     print_field()
     print_resources()
+
+    # Human player's turn (same code as before)
+
     
+
+    # Computer's turn (same code as before)
+
+    # Check for game over (same code as before)
+
+
+
     # Get user input
     while True:
         print("What do you want to do?")
@@ -97,3 +122,74 @@ while True:
                 i, j = get_random_empty_location()
                 field[i][j] = HUMAN_UNIT
                 human_resources -= 5
+                break
+            else:
+                print("Not enough resources!")
+        else:
+            print("Invalid choice!")
+    
+    # Collect resources for computer player
+    computer_resources += count_structures(COMPUTER_ENEMY) * RESOURCES_PER_STRUCTURE        
+    
+    # Computer's turn
+    if computer_resources >= 10:
+        i, j = get_random_empty_location()
+        field[i][j] = COMPUTER_STRUCTURE
+        computer_resources -= 10
+    if computer_resources >= 5:
+        i, j = get_random_empty_location()
+        field[i][j] = COMPUTER_UNIT
+        computer_resources -= 5
+    
+    # Check for game over
+    if human_resources == 0 and computer_resources == 0:
+        print("Game over! It's a tie!")
+        break
+    elif human_resources == 0:
+        print("Game over! You lost!")
+        break
+    elif computer_resources == 0:
+        print("Game over! You won!")
+        break
+
+"""
+
+To give units the ability to attack and add a delay to structure construction, we can make the following changes:
+
+1.Add a constant for the number of turns required to construct a structure.
+2.Add a constant for unit attack range.
+3.Modify the field representation to include structure construction progress and unit health.
+4.Add helper functions to count down construction progress and perform unit attacks.
+5.Update the main game loop to include structure construction progress and unit attacks.
+
+
+# Define constants
+TURNS_TO_BUILD_STRUCTURE = 3
+UNIT_ATTACK_RANGE = 1
+
+# Modify the field representation
+field = [[(EMPTY, 0, 0) for i in range(FIELD_SIZE)] for j in range(FIELD_SIZE)]
+field[0][0] = (HUMAN_BASE, 0, 0)
+field[FIELD_SIZE-1][FIELD_SIZE-1] = (COMPUTER_BASE, 0, 0)
+
+# Update the print_field function
+def print_field():
+    for i in range(FIELD_SIZE):
+        row = ""
+        for j in range(FIELD_SIZE):
+            tile, construction_progress, unit_health = field[i][j]
+            if tile == EMPTY:
+                row += "   "
+            elif tile == HUMAN_BASE:
+                row += " H "
+            elif tile == HUMAN_STRUCTURE:
+                row += " h "
+            elif tile == HUMAN_UNIT:
+                row += " u "
+            elif tile == COMPUTER_BASE:
+                row += " C "
+            elif tile == COMPUTER_STRUCTURE:
+                row += " c "
+            elif tile == COMPUTER_UNIT:
+               
+"""
